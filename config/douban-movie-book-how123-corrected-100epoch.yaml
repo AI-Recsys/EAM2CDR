@@ -1,0 +1,159 @@
+field_separator: "\t"
+gpu_id: 0
+use_gpu: true
+seed: 2026
+reproducibility: true
+show_progress: false
+data_path: dataset/
+dataloaders_save_path: saved/fixed-split/douban-movie-book-seed2026-dataloader.pth
+embedding_size: 64
+geometry_mode: product
+manifold_dimensions: [16, 16, 32]
+source_spherical_curvature: 1.0
+target_spherical_curvature: 1.0
+source_hyperbolic_curvature: 1.0
+target_hyperbolic_curvature: 1.0
+gate_hidden_size: 32
+gate_heads: 4
+gate_temperature: 1.0
+topology_gate_strength: 1.0
+energy_gate_strength: 0.25
+normalize_energy_by_degree: true
+normalize_energy_per_node: true
+detach_energy_feedback: true
+normalize_component_distances: false
+gate_warmup_epochs: 0
+gate_prior_epochs: 0
+gate_ramp_epochs: 30
+gate_initial_adaptive_scale: 0.10
+equal_component_prior: true
+gate_shadow_train_during_prior: false
+gate_floor: 0.15
+gate_balance_weight: 0.01
+gate_node_kl_ratio: 0.0
+gate_dropout: 0.0
+enable_how2: true
+how2_hidden_size: 64
+disentanglement_weight: 0.001
+density_energy_weight: 0.001
+cluster_weight: 0.001
+density_energy_temperature: 1.0
+density_energy_margin: 1.0
+density_energy_noise_scale: 2.0
+density_energy_l2: 0.001
+num_preference_clusters: 4
+cluster_temperature: 1.0
+cluster_balance_weight: 1.0
+cluster_standardize_distances: true
+cluster_distance_scale_floor: 1.0
+multi_interest_temperature: 0.2
+interest_separation_weight: 0.1
+interest_separation_margin: 1.0
+w2_num_projections: 16
+how2_warmup_epochs: 0
+how2_ramp_epochs: 60
+how2_residual_scale: 0.01
+how2_fixed_ramp_scale: null
+how2_initial_ramp_scale: 0.05
+detach_how2_auxiliary_base: true
+freeze_how1_after_warmup: false
+how2_restore_best_warmup: false
+enable_how3: true
+how3_trainer: true
+how3_start_epoch: 0
+how3_ramp_epochs: 75
+how3_initial_scale: 0.05
+how3_recalibration_epochs: [5, 15, 30, 60, 75]
+selective_align_weight: 0.01
+selective_contrastive_weight: 0.5
+align_loss_cap_ratio: 0.1
+energy_temperature: 1.0
+energy_cross_weight: 1.0
+energy_threshold_mode: quantile
+energy_threshold_quantile: 0.2
+energy_fdr_alpha: 0.1
+energy_hard_screen: true
+energy_trust_max_fraction: 0.2
+align_detach_source: true
+shared_grad_mode: gradcraft+multibalance
+shared_grad_norm_ratio_max: 0.5
+warm_start_checkpoint: null
+continuation_epoch_offset: 0
+reset_interest_clusters_on_warm_start: false
+recalibrate_how3_on_warm_start: false
+energy_chunk_size: 262144
+contrastive_chunk_size: 512
+max_transfer_users: 1024
+n_layers: 3
+source_curvature: 1.0
+target_curvature: 1.0
+learnable_curvature: true
+margin: 0.1
+temperature: 0.2
+transfer_weight: 0.05
+hierarchy_weight: 0.01
+hierarchy_radius_sq: 10.0
+reg_weight: 0.0001
+num_transfer_negatives: 3
+graph_dropout: 0.0
+mapping_dropout: 0.1
+bidirectional: true
+detach_transferred: true
+u_u_cts: true
+u_i_cts: true
+i_u_cts: true
+i_i_cts: true
+init_scale: 0.05
+loss_type: margin
+train_epochs: ["BOTH:100"]
+train_batch_size: 4096
+overlap_batch_size: 1024
+learner: adam
+learning_rate: 0.0001
+neg_sampling:
+  uniform: 1
+eval_step: 1
+stopping_step: 100
+checkpoint_dir: saved/how123-corrected-joint-100epoch
+eval_args:
+  split:
+    RS: [0.8, 0.1, 0.1]
+  split_valid:
+    RS: [0.8, 0.2]
+  group_by: user
+  order: RO
+  mode: full
+metrics: [Recall, MRR, NDCG, Hit, Precision]
+topk: [10]
+valid_metric: NDCG@10
+eval_batch_size: 2048
+source_domain:
+  dataset: DoubanMovie_DoubanBook_commonUser_10-core
+  USER_ID_FIELD: user_id
+  ITEM_ID_FIELD: item_id
+  RATING_FIELD: rating
+  TIME_FIELD: timestamp
+  NEG_PREFIX: neg_
+  LABEL_FIELD: label
+  load_col:
+    inter: [user_id, item_id, rating, timestamp]
+  user_inter_num_interval: '[10,inf)'
+  item_inter_num_interval: '[10,inf)'
+  val_interval:
+    rating: '[3,inf)'
+  drop_filter_field: true
+target_domain:
+  dataset: DoubanBook_DoubanMovie_commonUser_10-core
+  USER_ID_FIELD: user_id
+  ITEM_ID_FIELD: item_id
+  RATING_FIELD: rating
+  TIME_FIELD: timestamp
+  NEG_PREFIX: neg_
+  LABEL_FIELD: label
+  load_col:
+    inter: [user_id, item_id, rating, timestamp]
+  user_inter_num_interval: '[10,inf)'
+  item_inter_num_interval: '[10,inf)'
+  val_interval:
+    rating: '[3,inf)'
+  drop_filter_field: true

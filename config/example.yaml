@@ -1,0 +1,82 @@
+# Small training recipe using the included Douban Movie -> Book files.
+field_separator: "\t"
+gpu_id: 0
+use_gpu: true
+seed: 2026
+reproducibility: true
+show_progress: true
+data_path: dataset/
+
+embedding_size: 32
+n_layers: 2
+source_curvature: 1.0
+target_curvature: 1.0
+learnable_curvature: true
+margin: 0.1
+temperature: 0.2
+transfer_weight: 0.05
+hierarchy_weight: 0.01
+hierarchy_radius_sq: 10.0
+reg_weight: 0.0001
+num_transfer_negatives: 3
+graph_dropout: 0.0
+mapping_dropout: 0.1
+bidirectional: true
+detach_transferred: true
+u_u_cts: true
+u_i_cts: true
+i_u_cts: true
+i_i_cts: true
+init_scale: 0.05
+
+loss_type: BPR
+train_epochs: ["BOTH:5"]
+train_batch_size: 16
+overlap_batch_size: 4
+learner: adam
+learning_rate: 0.001
+neg_sampling: {uniform: 1}
+eval_step: 1
+stopping_step: 10
+checkpoint_dir: saved
+
+eval_args:
+  split: {RS: [0.8, 0.1, 0.1]}
+  split_valid: {RS: [0.8, 0.2]}
+  group_by: user
+  order: RO
+  mode: full
+metrics: [Recall, MRR, NDCG, Hit, Precision]
+topk: [3, 5]
+valid_metric: NDCG@3
+eval_batch_size: 64
+
+source_domain:
+  dataset: DoubanMovie_DoubanBook_commonUser_10-core
+  USER_ID_FIELD: user_id
+  ITEM_ID_FIELD: item_id
+  RATING_FIELD: rating
+  NEG_PREFIX: neg_
+  LABEL_FIELD: label
+  load_col:
+    inter: [user_id, item_id, rating]
+  user_inter_num_interval: "[1,inf)"
+  item_inter_num_interval: "[1,inf)"
+  val_interval:
+    rating: "[3,inf)"
+  drop_filter_field: true
+
+target_domain:
+  dataset: DoubanBook_DoubanMovie_commonUser_10-core
+  USER_ID_FIELD: user_id
+  ITEM_ID_FIELD: item_id
+  RATING_FIELD: rating
+  NEG_PREFIX: neg_
+  LABEL_FIELD: label
+  load_col:
+    inter: [user_id, item_id, rating]
+  user_inter_num_interval: "[1,inf)"
+  item_inter_num_interval: "[1,inf)"
+  val_interval:
+    rating: "[3,inf)"
+  drop_filter_field: true
