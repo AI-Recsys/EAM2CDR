@@ -1,0 +1,7 @@
+# Versions expected by the adjacent RecBole-CDR-main repository.
+recbole==1.0.1
+numpy<2.0
+scipy
+pandas
+tqdm
+Pillow
